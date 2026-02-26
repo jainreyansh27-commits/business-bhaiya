@@ -18,7 +18,8 @@ export default function SalesCalling() {
   const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [sheetLink, setSheetLink] = useState("");
-
+const [filter, setFilter] = useState("all");
+const [hideClosed, setHideClosed] = useState(false);
   // ---------------- FETCH LEADS ----------------
   const fetchLeads = async () => {
     const { data } = await supabase.from("leads").select("*");
@@ -144,9 +145,19 @@ export default function SalesCalling() {
     });
   };
 
-  const pending = leads.filter((l) => l.status === "pending");
-  const meetings = leads.filter((l) => l.status === "meeting");
-  const closed = leads.filter((l) => l.status === "closed");
+  let filteredLeads = leads;
+
+if (filter !== "all") {
+  filteredLeads = leads.filter((l) => l.status === filter);
+}
+
+if (hideClosed) {
+  filteredLeads = filteredLeads.filter((l) => l.status !== "closed");
+}
+
+const pending = filteredLeads.filter((l) => l.status === "pending");
+const meetings = filteredLeads.filter((l) => l.status === "meeting");
+const closed = filteredLeads.filter((l) => l.status === "closed");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black p-6 text-white">
@@ -209,7 +220,29 @@ export default function SalesCalling() {
           </button>
         </div>
       </div>
+<div className="flex items-center gap-4 mb-6">
 
+  <select
+    value={filter}
+    onChange={(e) => setFilter(e.target.value)}
+    className="bg-gray-800 px-3 py-2 rounded"
+  >
+    <option value="all">All</option>
+    <option value="pending">Calls To Be Made</option>
+    <option value="meeting">Meetings</option>
+    <option value="closed">Closed</option>
+  </select>
+
+  <label className="flex items-center gap-2 text-sm">
+    <input
+      type="checkbox"
+      checked={hideClosed}
+      onChange={(e) => setHideClosed(e.target.checked)}
+    />
+    Hide Closed Deals
+  </label>
+
+</div>
       {/* PIPELINE */}
       <div className="grid md:grid-cols-3 gap-6">
         <Column

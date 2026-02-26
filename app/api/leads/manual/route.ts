@@ -8,32 +8,30 @@ const supabaseAdmin = createClient(
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { name, phone, company, userId } = body;
+    const { name, phone, company, userId } = await req.json();
 
-    // 🔍 Basic validation
-    if (!name || !userId) {
+    // 🔐 Validate required fields
+    if (!userId || !name || name.trim() === "") {
       return NextResponse.json(
-        { error: "Missing required fields: name or userId" },
+        { error: "Name and userId are required" },
         { status: 400 }
       );
     }
 
-    // 🚀 Insert into leads table
+    // 🧠 Insert into leads table
     const { data, error } = await supabaseAdmin
       .from("leads")
       .insert([
         {
           user_id: userId,
-          name,
-          phone,
-          company,
+          name: name.trim(),
+          phone: phone || "",
+          company: company || "",
           status: "pending",
         },
       ])
       .select();
 
-    // ❌ Handle DB error properly
     if (error) {
       console.error("Insert Error:", error);
       return NextResponse.json(
@@ -42,16 +40,15 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Success
     return NextResponse.json({
       success: true,
       data,
     });
-  } catch (err: any) {
-    console.error("API Error:", err);
 
+  } catch (err) {
+    console.error("Manual Route Server Error:", err);
     return NextResponse.json(
-      { error: "Server error creating lead" },
+      { error: "Server error" },
       { status: 500 }
     );
   }
