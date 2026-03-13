@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.97.0",
     "canvas-confetti": "^1.9.4",
     "next": "16.1.6",
+    "opencv.js": "^1.2.1",
     "papaparse": "^5.5.3",
     "pdf-lib": "^1.17.1",
     "react": "19.2.3",

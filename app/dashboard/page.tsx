@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
+import AIBrief from "../components/AIBrief"
+
 export default function Dashboard() {
   const [profile, setProfile] = useState<any>(null);
   const [dailyPlan, setDailyPlan] = useState<any>(null);
   const router = useRouter();
+const [sales, setSales] = useState<any>(null)
+const [tasks, setTasks] = useState<any>(null)
 
   useEffect(() => {
     const loadData = async () => {
@@ -20,13 +24,55 @@ export default function Dashboard() {
         return;
       }
 
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
+      /* PROFILE */
 
-      setProfile(data);
+const { data: profileData } = await supabase
+.from("profiles")
+.select("*")
+.eq("id", user.id)
+.single()
+
+setProfile(profileData)
+
+/* SALES DATA */
+
+const { data: salesData } = await supabase
+.from("sales_tracker")
+.select("*")
+.eq("user_id", user.id)
+
+const revenue =
+salesData?.reduce((sum, s) => sum + (s.amount || 0), 0) || 0
+
+const calls =
+salesData?.filter((s) => s.type === "call").length || 0
+
+const meetings =
+salesData?.filter((s) => s.type === "meeting").length || 0
+
+const deals =
+salesData?.filter((s) => s.type === "deal").length || 0
+
+setSales({
+revenue,
+calls,
+meetings,
+deals
+})
+
+/* TASK DATA */
+
+const { data: tasksData } = await supabase
+.from("tasks")
+.select("*")
+.eq("user_id", user.id)
+
+const pendingTasks =
+tasksData?.filter((t) => !t.completed).length || 0
+
+setTasks({
+pending: pendingTasks
+})
     };
 
     loadData();
@@ -167,7 +213,11 @@ const res = await fetch("/api/daily-plan", {
           Logout
         </button>
       </div>
-
+<AIBrief
+profile={profile}
+sales={sales}
+tasks={tasks}
+/>
       {/* Progress Bar */}
       <div className="mb-10">
         <h2 className="text-lg text-gray-400 mb-2">

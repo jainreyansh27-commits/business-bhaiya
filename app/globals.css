@@ -30,3 +30,24 @@
 .animate-fadeUp {
   animation: fadeUp 1s ease-out forwards;
 }
+
+
+@keyframes aiPulse {
+
+0% {
+box-shadow: 0 0 0 0 rgba(168,85,247,0.7);
+}
+
+70% {
+box-shadow: 0 0 0 15px rgba(168,85,247,0);
+}
+
+100% {
+box-shadow: 0 0 0 0 rgba(168,85,247,0);
+}
+
+}
+
+.ai-orb{
+animation: aiPulse 1.5s infinite;
+}

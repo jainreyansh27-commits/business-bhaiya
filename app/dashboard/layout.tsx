@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import VoiceAssistant from "../components/VoiceAssistant";
 
 export default function DashboardLayout({
   children,
@@ -36,6 +37,22 @@ export default function DashboardLayout({
 >
   Tasks
 </Link>
+
+<Link href="/dashboard/ai-tools">
+AI Tools
+</Link>
+
+
+
+
+<Link
+  href="/dashboard/documents"
+  className="block px-4 py-2 rounded hover:bg-gray-800"
+>
+  Documents
+</Link>
+
+<VoiceAssistant />
         </nav>
       </aside>
 
