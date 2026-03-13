@@ -41,27 +41,27 @@ return (
 
 <div className="p-10">
 
-<h1 className="text-3xl font-semibold mb-8">
+<h1 className="text-3xl font-semibold mb-8 text-gray-900">
 AI Tools
 </h1>
 
-<div className="grid grid-cols-3 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
 {tools.map((tool,i)=>(
 
 <Link key={i} href={tool.link}>
 
-<div className="bg-slate-800 hover:bg-slate-700 transition border border-slate-700 rounded-xl p-6 cursor-pointer">
+<div className="bg-white hover:bg-gray-50 transition-all duration-200 border border-gray-200 rounded-xl p-6 cursor-pointer shadow-sm hover:shadow-md">
 
-<div className="text-3xl mb-4">
+<div className="text-4xl mb-4 text-blue-500">
 {tool.icon}
 </div>
 
-<h2 className="text-lg font-semibold mb-1">
+<h2 className="text-lg font-semibold mb-1 text-gray-900">
 {tool.name}
 </h2>
 
-<p className="text-sm text-slate-400">
+<p className="text-sm text-gray-600">
 {tool.desc}
 </p>
 
